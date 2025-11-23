@@ -1,5 +1,7 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import './Statistics.css'
+import { Card, Typography } from 'antd'
+
+const { Title } = Typography
 
 // 模拟统计数据
 const data = [
@@ -14,9 +16,9 @@ const data = [
 
 export default function Statistics() {
   return (
-    <div className="statistics-page">
-      <h2>PDD下单统计图</h2>
-      <div className="chart-container">
+    <div>
+      <Title level={2}>PDD下单统计图</Title>
+      <Card>
         <ResponsiveContainer width="100%" height={400}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -30,7 +32,7 @@ export default function Statistics() {
             <Line yAxisId="right" type="monotone" dataKey="successRate" stroke="#ff7300" name="成功率(%)" />
           </LineChart>
         </ResponsiveContainer>
-      </div>
+      </Card>
     </div>
   )
 }

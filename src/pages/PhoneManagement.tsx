@@ -1,5 +1,8 @@
 import { useState } from 'react'
-import './PhoneManagement.css'
+import { Table, Switch, Card, Typography } from 'antd'
+import type { ColumnsType } from 'antd/es/table'
+
+const { Title } = Typography
 
 interface Phone {
   id: number
@@ -33,56 +36,64 @@ export default function PhoneManagement() {
     ))
   }
 
+  const columns: ColumnsType<Phone> = [
+    {
+      title: '手机号',
+      dataIndex: 'phone',
+      key: 'phone',
+    },
+    {
+      title: 'IP地址',
+      dataIndex: 'ip',
+      key: 'ip',
+    },
+    {
+      title: '手机开关',
+      key: 'phoneSwitch',
+      render: (_, record) => (
+        <Switch
+          checked={record.phoneSwitch}
+          onChange={() => toggleSwitch(record.id, 'phoneSwitch')}
+        />
+      ),
+    },
+    {
+      title: '团队开关',
+      key: 'teamSwitch',
+      render: (_, record) => (
+        <Switch
+          checked={record.teamSwitch}
+          onChange={() => toggleSwitch(record.id, 'teamSwitch')}
+        />
+      ),
+    },
+    {
+      title: '风控开关',
+      key: 'riskSwitch',
+      render: (_, record) => (
+        <Switch
+          checked={record.riskSwitch}
+          onChange={() => toggleSwitch(record.id, 'riskSwitch')}
+        />
+      ),
+    },
+  ]
+
   return (
-    <div className="phone-management-page">
-      <header>
-        <h2>PDD下单管理后台</h2>
-      </header>
-      <div className="phone-list">
-        <table>
-          <thead>
-            <tr>
-              <th>手机号</th>
-              <th>IP地址</th>
-              <th>手机开关</th>
-              <th>团队开关</th>
-              <th>风控开关</th>
-            </tr>
-          </thead>
-          <tbody>
-            {phones.map(phone => (
-              <tr key={phone.id}>
-                <td>{phone.phone}</td>
-                <td>{phone.ip}</td>
-                <td>
-                  <button
-                    className={`switch ${phone.phoneSwitch ? 'on' : 'off'}`}
-                    onClick={() => toggleSwitch(phone.id, 'phoneSwitch')}
-                  >
-                    {phone.phoneSwitch ? '开' : '关'}
-                  </button>
-                </td>
-                <td>
-                  <button
-                    className={`switch ${phone.teamSwitch ? 'on' : 'off'}`}
-                    onClick={() => toggleSwitch(phone.id, 'teamSwitch')}
-                  >
-                    {phone.teamSwitch ? '开' : '关'}
-                  </button>
-                </td>
-                <td>
-                  <button
-                    className={`switch ${phone.riskSwitch ? 'on' : 'off'}`}
-                    onClick={() => toggleSwitch(phone.id, 'riskSwitch')}
-                  >
-                    {phone.riskSwitch ? '开' : '关'}
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div>
+      <Title level={2}>手机管理</Title>
+      <Card>
+        <Table
+          columns={columns}
+          dataSource={phones}
+          rowKey="id"
+          pagination={{
+            pageSize: 10,
+            showSizeChanger: true,
+            showTotal: (total) => `共 ${total} 条`,
+          }}
+        />
+      </Card>
     </div>
   )
 }

@@ -3,6 +3,7 @@ import Layout from './components/Layout'
 import Statistics from './pages/Statistics'
 import PhoneManagement from './pages/PhoneManagement'
 import OrderBoard from './pages/OrderBoard'
+import VideoDemo from './pages/VideoDemo'
 import './App.css'
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
           <Route path="/statistics" element={<Statistics />} />
           <Route path="/phones" element={<PhoneManagement />} />
           <Route path="/orders" element={<OrderBoard />} />
+          <Route path="/videos" element={<VideoDemo />} />
         </Routes>
       </Layout>
     </Router>

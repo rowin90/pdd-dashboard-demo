@@ -1,5 +1,10 @@
 import { useState } from 'react'
-import './OrderBoard.css'
+import { Table, Form, Input, Select, Button, Card, Typography, Space } from 'antd'
+import type { ColumnsType } from 'antd/es/table'
+import { SearchOutlined, ReloadOutlined } from '@ant-design/icons'
+
+const { Title } = Typography
+const { Option } = Select
 
 interface OrderTask {
   id: number
@@ -92,196 +97,173 @@ const initialTasks: OrderTask[] = [
 
 export default function OrderBoard() {
   const [tasks] = useState<OrderTask[]>(initialTasks)
-  const [searchForm, setSearchForm] = useState({
-    orderId: '',
-    productName: '',
-    createTime: '',
-    orderTime: '',
-    payTime: '',
-    completeTime: '',
-    warehouse: '',
-    status: '',
-    forceOrder: ''
-  })
+  const [form] = Form.useForm()
 
-  const handleSearch = () => {
-    // 搜索逻辑
-    console.log('搜索:', searchForm)
+  const handleSearch = (values: any) => {
+    console.log('搜索:', values)
   }
 
   const handleReset = () => {
-    setSearchForm({
-      orderId: '',
-      productName: '',
-      createTime: '',
-      orderTime: '',
-      payTime: '',
-      completeTime: '',
-      warehouse: '',
-      status: '',
-      forceOrder: ''
-    })
+    form.resetFields()
   }
 
+  const columns: ColumnsType<OrderTask> = [
+    {
+      title: '订单ID',
+      dataIndex: 'orderId',
+      key: 'orderId',
+      width: 150,
+    },
+    {
+      title: '时间信息',
+      key: 'timeInfo',
+      width: 200,
+      render: (_, record) => (
+        <div>
+          <div>创建时间：{record.createTime}</div>
+          <div>下单时间：{record.orderTime}</div>
+          <div>支付时间：{record.payTime}</div>
+          <div>完成时间：{record.completeTime}</div>
+          <div>同步时间：{record.syncTime}</div>
+        </div>
+      ),
+    },
+    {
+      title: '商品信息',
+      key: 'productInfo',
+      width: 250,
+      render: (_, record) => (
+        <div>
+          <div>商品：{record.product}</div>
+          <div>价格：{record.price}</div>
+          <div>仓库地址：{record.warehouse}</div>
+          <div>是否强制下单：{record.forceOrder ? '是' : '否'}</div>
+        </div>
+      ),
+    },
+    {
+      title: '下单数量/SKU信息',
+      key: 'quantityInfo',
+      width: 200,
+      render: (_, record) => (
+        <div>
+          <div>下单数量：{record.quantity}</div>
+          <div>SKU信息：{record.sku}</div>
+          <div>单价：{record.unitPrice}</div>
+          <div>总价：{record.totalPrice}</div>
+        </div>
+      ),
+    },
+    {
+      title: '同步单号',
+      dataIndex: 'syncOrderId',
+      key: 'syncOrderId',
+      width: 150,
+    },
+    {
+      title: '手机号',
+      dataIndex: 'phone',
+      key: 'phone',
+      width: 120,
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      width: 100,
+    },
+    {
+      title: '运单号',
+      dataIndex: 'trackingNumber',
+      key: 'trackingNumber',
+      width: 150,
+    },
+    {
+      title: '操作',
+      key: 'action',
+      width: 150,
+      fixed: 'right',
+      render: () => (
+        <Space direction="vertical" size="small" style={{ width: '100%' }}>
+          <Button size="small" block>重做</Button>
+          <Button size="small" block>补充单号</Button>
+          <Button size="small" block>补充运单号</Button>
+          <Button size="small" type="primary" block>发起同步任务</Button>
+        </Space>
+      ),
+    },
+  ]
+
   return (
-    <div className="order-board-page">
-      <header>
-        <h2>PDD下单管理后台</h2>
-      </header>
+    <div>
+      <Title level={2}>PDD下单任务看板</Title>
 
-      <div className="search-form">
-        <div className="form-row">
-          <div className="form-item">
-            <label>订单ID</label>
-            <input
-              type="text"
-              value={searchForm.orderId}
-              onChange={(e) => setSearchForm({ ...searchForm, orderId: e.target.value })}
-              placeholder="订单ID"
-            />
-          </div>
-          <div className="form-item">
-            <label>商品名称</label>
-            <input
-              type="text"
-              value={searchForm.productName}
-              onChange={(e) => setSearchForm({ ...searchForm, productName: e.target.value })}
-              placeholder="商品名称"
-            />
-          </div>
-          <div className="form-item">
-            <label>创建时间</label>
-            <input
-              type="text"
-              value={searchForm.createTime}
-              onChange={(e) => setSearchForm({ ...searchForm, createTime: e.target.value })}
-              placeholder="创建时间"
-            />
-          </div>
-          <div className="form-item">
-            <label>下单时间</label>
-            <input
-              type="text"
-              value={searchForm.orderTime}
-              onChange={(e) => setSearchForm({ ...searchForm, orderTime: e.target.value })}
-              placeholder="下单时间"
-            />
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="form-item">
-            <label>支付时间</label>
-            <input
-              type="text"
-              value={searchForm.payTime}
-              onChange={(e) => setSearchForm({ ...searchForm, payTime: e.target.value })}
-              placeholder="支付时间"
-            />
-          </div>
-          <div className="form-item">
-            <label>完成时间</label>
-            <input
-              type="text"
-              value={searchForm.completeTime}
-              onChange={(e) => setSearchForm({ ...searchForm, completeTime: e.target.value })}
-              placeholder="完成时间"
-            />
-          </div>
-          <div className="form-item">
-            <label>仓库地址</label>
-            <input
-              type="text"
-              value={searchForm.warehouse}
-              onChange={(e) => setSearchForm({ ...searchForm, warehouse: e.target.value })}
-              placeholder="仓库地址"
-            />
-          </div>
-          <div className="form-item">
-            <label>状态</label>
-            <select
-              value={searchForm.status}
-              onChange={(e) => setSearchForm({ ...searchForm, status: e.target.value })}
-            >
-              <option value="">全部</option>
-              <option value="已同步">已同步</option>
-              <option value="未同步">未同步</option>
-            </select>
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="form-item">
-            <label>是否强制下单</label>
-            <select
-              value={searchForm.forceOrder}
-              onChange={(e) => setSearchForm({ ...searchForm, forceOrder: e.target.value })}
-            >
-              <option value="">全部</option>
-              <option value="是">是</option>
-              <option value="否">否</option>
-            </select>
-          </div>
-          <div className="form-actions">
-            <button onClick={handleSearch}>搜索</button>
-            <button onClick={handleReset}>重置</button>
-          </div>
-        </div>
-      </div>
+      <Card style={{ marginBottom: 16 }}>
+        <Form
+          form={form}
+          layout="inline"
+          onFinish={handleSearch}
+          style={{ marginBottom: 0 }}
+        >
+          <Form.Item name="orderId" label="订单ID">
+            <Input placeholder="订单ID" allowClear />
+          </Form.Item>
+          <Form.Item name="productName" label="商品名称">
+            <Input placeholder="商品名称" allowClear />
+          </Form.Item>
+          <Form.Item name="createTime" label="创建时间">
+            <Input placeholder="创建时间" allowClear />
+          </Form.Item>
+          <Form.Item name="orderTime" label="下单时间">
+            <Input placeholder="下单时间" allowClear />
+          </Form.Item>
+          <Form.Item name="payTime" label="支付时间">
+            <Input placeholder="支付时间" allowClear />
+          </Form.Item>
+          <Form.Item name="completeTime" label="完成时间">
+            <Input placeholder="完成时间" allowClear />
+          </Form.Item>
+          <Form.Item name="warehouse" label="仓库地址">
+            <Input placeholder="仓库地址" allowClear />
+          </Form.Item>
+          <Form.Item name="status" label="状态">
+            <Select placeholder="全部" allowClear style={{ width: 120 }}>
+              <Option value="已同步">已同步</Option>
+              <Option value="未同步">未同步</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item name="forceOrder" label="是否强制下单">
+            <Select placeholder="全部" allowClear style={{ width: 120 }}>
+              <Option value="是">是</Option>
+              <Option value="否">否</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item>
+            <Space>
+              <Button type="primary" htmlType="submit" icon={<SearchOutlined />}>
+                搜索
+              </Button>
+              <Button onClick={handleReset} icon={<ReloadOutlined />}>
+                重置
+              </Button>
+            </Space>
+          </Form.Item>
+        </Form>
+      </Card>
 
-      <div className="task-list">
-        <table>
-          <thead>
-            <tr>
-              <th>订单ID</th>
-              <th>时间信息</th>
-              <th>商品信息</th>
-              <th>下单数量/SKU信息</th>
-              <th>同步单号</th>
-              <th>手机号</th>
-              <th>状态</th>
-              <th>运单号</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tasks.map(task => (
-              <tr key={task.id}>
-                <td>{task.orderId}</td>
-                <td>
-                  <div>创建时间：{task.createTime}</div>
-                  <div>下单时间：{task.orderTime}</div>
-                  <div>支付时间：{task.payTime}</div>
-                  <div>完成时间：{task.completeTime}</div>
-                  <div>同步时间：{task.syncTime}</div>
-                </td>
-                <td>
-                  <div>商品：{task.product}</div>
-                  <div>价格：{task.price}</div>
-                  <div>仓库地址：{task.warehouse}</div>
-                  <div>是否强制下单：{task.forceOrder ? '是' : '否'}</div>
-                </td>
-                <td>
-                  <div>下单数量：{task.quantity}</div>
-                  <div>SKU信息：{task.sku}</div>
-                  <div>单价：{task.unitPrice}</div>
-                  <div>总价：{task.totalPrice}</div>
-                </td>
-                <td>{task.syncOrderId}</td>
-                <td>{task.phone}</td>
-                <td>{task.status}</td>
-                <td>{task.trackingNumber}</td>
-                <td>
-                  <div className="action-buttons">
-                    <button>重做</button>
-                    <button>补充单号</button>
-                    <button>补充运单号</button>
-                    <button>发起同步任务</button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <Card>
+        <Table
+          columns={columns}
+          dataSource={tasks}
+          rowKey="id"
+          scroll={{ x: 1500 }}
+          pagination={{
+            pageSize: 10,
+            showSizeChanger: true,
+            showTotal: (total) => `共 ${total} 条`,
+          }}
+        />
+      </Card>
     </div>
   )
 }
