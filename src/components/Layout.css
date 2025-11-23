@@ -1,0 +1,48 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #001529;
+  color: #fff;
+  padding: 20px 0;
+  flex-shrink: 0;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li {
+  margin: 0;
+}
+
+.menu a {
+  display: block;
+  padding: 12px 24px;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.menu a:hover {
+  background-color: #1890ff;
+  color: #fff;
+}
+
+.menu a.active {
+  background-color: #1890ff;
+  color: #fff;
+}
+
+.main-content {
+  flex: 1;
+  padding: 24px;
+  background-color: #fff;
+  overflow-y: auto;
+}
