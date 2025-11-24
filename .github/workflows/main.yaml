@@ -7,6 +7,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    # 秘钥是创建到不同环境的，这里需要根据环境来选择
     environment: pdd-dashboard-demo-cloudflare
     steps:
       - uses: actions/checkout@v4
